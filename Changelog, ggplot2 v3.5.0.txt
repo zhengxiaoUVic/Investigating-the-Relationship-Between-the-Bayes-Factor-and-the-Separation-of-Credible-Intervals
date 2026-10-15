@@ -1,0 +1,31 @@
+We wanted to bring to your attention that the widely used "ggplot2" package for R has recently been updated to version 3.5.0. It has come to our notice that this version introduces significant changes, including the deprecation of several theme functions that we frequently use. Consequently, some of the existing visualizations are not functioning as anticipated with this new update.
+
+https://github.com/tidyverse/ggplot2/issues/5711
+
+For instance, here's a minimal example where the adjustment of horizontal spacing between legend items no longer works as it did previously:
+```{r}
+library(ggplot2)
+
+##3.4.4
+# Sample plot with adjusted legend spacing along the x-axis
+ggplot(mpg, aes(x=displ, y=hwy, color=factor(cyl))) + 
+  geom_point() +
+  theme(
+    # Adjust the horizontal spacing between legend items
+    legend.spacing.x = unit(1, "cm") # Adjust the spacing to 1 cm
+  )
+
+##3.5.0
+ggplot(mpg, aes(x=displ, y=hwy, color=factor(cyl))) + 
+  geom_point() +
+  theme(
+    legend.text = element_text(margin = margin(0, 0, 0, 1, "cm"))
+  )
+```
+
+Given these challenges, we strongly recommend staying with the previous version, 3.4.4, (to reproduce the figures in this project, including but not limited to new Figure 2.R, new Figure 7.R, new Figure 7 btw.R, BF50.R, 7-varying sample sizes.R, and visualization_MC.R) for the time being. If you've already upgraded, here are the steps to revert to version 3.4.4:
+```{r}
+remove.packages("ggplot2")
+# install.packages("devtools")
+devtools::install_version("ggplot2", version = "3.4.4")
+```
